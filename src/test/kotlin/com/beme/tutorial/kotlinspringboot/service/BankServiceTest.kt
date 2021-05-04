@@ -1,4 +1,4 @@
-package service
+package com.beme.tutorial.kotlinspringboot.service
 
 import com.beme.tutorial.kotlinspringboot.datasource.BankDataSource
 import io.mockk.every
