@@ -146,5 +146,21 @@ internal class BankControllerTest @Autowired constructor(
             mockMvc.get("/api/banks/${updatedBank.accountNumber}")
                 .andExpect { content { json(objectMapper.writeValueAsString(updatedBank)) } }
         }
+
+        @Test
+        fun `should return BAD REQUEST if no bank with given account number`() {
+            // given
+            val invalidBank = Bank("1101115", 1.2, 3)
+
+            // when
+            val performPatch = mockMvc.patch("/api/banks") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(invalidBank)
+            }
+
+            // then
+            performPatch.andDo { print() }
+                .andExpect { status { isNotFound() } }
+        }
     }
 }
