@@ -102,5 +102,24 @@ internal class BankControllerTest @Autowired constructor(
                     jsonPath("$.transactionFee") { value("0") }
                 }
         }
+        
+        @Test
+        fun `should return BAD REQUEST if bank with given account number already exists`() {
+            // given
+            val invalidBank = Bank("1101110", 1.2, 3)
+
+            // when
+            val performPost = mockMvc.post("/api/banks") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(invalidBank)
+            }
+
+            performPost.andDo { print() }
+                .andExpect {
+                    status { isBadRequest() }
+                }
+            // then
+            
+        }
     }
 }
