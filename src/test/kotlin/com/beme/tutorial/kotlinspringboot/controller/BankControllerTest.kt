@@ -96,6 +96,10 @@ internal class BankControllerTest @Autowired constructor(
                 // then
                 .andExpect {
                     status { isCreated() }
+                    content { contentType(MediaType.APPLICATION_JSON) }
+                    jsonPath("$.accountNumber") { value("acc123") }
+                    jsonPath("$.trust") { value("12.24") }
+                    jsonPath("$.transactionFee") { value("0") }
                 }
         }
     }
