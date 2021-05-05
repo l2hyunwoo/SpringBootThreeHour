@@ -1,6 +1,7 @@
 package com.beme.tutorial.kotlinspringboot.controller
 
 import com.beme.tutorial.kotlinspringboot.model.Bank
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -19,9 +20,10 @@ import org.springframework.test.web.servlet.post
 // @AutoConfigureMockMvc: MockMvc bean init
 @SpringBootTest
 @AutoConfigureMockMvc
-internal class BankControllerTest {
-    @Autowired
-    lateinit var mockMvc: MockMvc
+internal class BankControllerTest @Autowired constructor(
+    val mockMvc: MockMvc,
+    val objectMapper: ObjectMapper
+) {
 
     @Nested
     @DisplayName("GET /api/banks")
@@ -84,7 +86,12 @@ internal class BankControllerTest {
             val newBank = Bank("acc123", 12.24, 0)
 
             // when
-            mockMvc.post("/api/banks")
+            val performPost = mockMvc.post("/api/banks") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(newBank)
+            }
+
+            performPost
                 .andDo { print() }
                 // then
                 .andExpect {
