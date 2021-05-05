@@ -181,5 +181,16 @@ internal class BankControllerTest @Autowired constructor(
             mockMvc.get("/api/banks/${accountNumber}")
                 .andExpect { status { isNotFound() } }
         }
+
+        @Test
+        fun `should return BAD REQUEST if no bank with given account number`() {
+            // given
+            val accountNumber = 1101115
+            // when
+            mockMvc.delete("/api/banks/${accountNumber}")
+                .andDo { print() }
+                // then
+                .andExpect { status { isNotFound() } }
+        }
     }
 }
