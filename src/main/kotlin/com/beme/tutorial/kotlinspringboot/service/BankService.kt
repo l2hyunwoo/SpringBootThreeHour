@@ -7,8 +7,9 @@ import org.springframework.stereotype.Service
 @Service
 class BankService(private val bankDataSource: BankDataSource) {
     fun getBanks() = bankDataSource.retrieveBanks()
-    fun getBank(accountNumber: String) = bankDataSource.retrieveBanks()
-        .first { it.accountNumber == accountNumber }
+    fun getBank(accountNumber: String) = bankDataSource.retrieveBank(accountNumber)
+//        bankDataSource.retrieveBanks()
+//        .first { it.accountNumber == accountNumber }
     // bankDataSource.retrieveBanks()
     //        .find { it.accountNumber == accountNumber } ?: throw IllegalArgumentException("에바 참치")
 }
