@@ -1,5 +1,6 @@
 package com.beme.tutorial.kotlinspringboot.controller
 
+import com.beme.tutorial.kotlinspringboot.model.Bank
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -10,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
 
 // 전체 Application Context를 Initialize할 수 있음
 // 부분적으로 객체를 초기화시키는 등의 전략으로 Spring Boot Test를 해줘야 됨
@@ -22,7 +24,7 @@ internal class BankControllerTest {
     lateinit var mockMvc: MockMvc
 
     @Nested
-    @DisplayName("getBanks()")
+    @DisplayName("GET /api/banks")
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     inner class GetBanks {
         @Test
@@ -40,7 +42,7 @@ internal class BankControllerTest {
     }
 
     @Nested
-    @DisplayName("getBank()")
+    @DisplayName("GET /api/banks/{accountNumber}")
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     inner class GetBank {
         @Test
@@ -57,7 +59,7 @@ internal class BankControllerTest {
                     jsonPath("$.trust") { value("1.2") }
                 }
         }
-        
+
         @Test
         fun `should return NOT FOUND if the account number does not exist`() {
             // given
@@ -65,9 +67,28 @@ internal class BankControllerTest {
             // when
             mockMvc.get("/api/banks/$accountNumber")
                 .andDo { print() }
-            // then
+                // then
                 .andExpect {
                     status { isNotFound() }
+                }
+        }
+    }
+
+    @Nested
+    @DisplayName("POST /api/banks")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class PostBankControllerTest {
+        @Test
+        fun `should add the new bank`() {
+            // given
+            val newBank = Bank("acc123", 12.24, 0)
+
+            // when
+            mockMvc.post("/api/banks")
+                .andDo { print() }
+                // then
+                .andExpect {
+                    status { isCreated() }
                 }
         }
     }
