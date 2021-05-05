@@ -140,8 +140,14 @@ internal class BankControllerTest @Autowired constructor(
             performPut.andDo { print() }
                 .andExpect {
                     status { isOk() }
-                    
+                    content {
+                        contentType(MediaType.APPLICATION_JSON)
+                        json(objectMapper.writeValueAsString(updatedBank))
+                    }
                 }
+
+            mockMvc.get("/api/banks/${updatedBank.accountNumber}")
+                .andExpect { content { json(objectMapper.writeValueAsString(updatedBank)) } }
         }
     }
 }

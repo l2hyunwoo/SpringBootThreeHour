@@ -26,4 +26,7 @@ class BankController(private val bankService: BankService) {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun registerBank(@RequestBody bank: Bank): Bank = bankService.addBank(bank)
+
+    //@PutMapping
+    //fun patchBank(@RequestBody bank: Bank) = bankService.updateBank(bank)
 }
