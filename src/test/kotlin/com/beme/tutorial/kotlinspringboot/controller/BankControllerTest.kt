@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.get
-import org.springframework.test.web.servlet.post
-import org.springframework.test.web.servlet.put
+import org.springframework.test.web.servlet.*
 
 // 전체 Application Context를 Initialize할 수 있음
 // 부분적으로 객체를 초기화시키는 등의 전략으로 Spring Boot Test를 해줘야 됨
@@ -122,7 +119,7 @@ internal class BankControllerTest @Autowired constructor(
     }
 
     @Nested
-    @DisplayName("PUT /api/banks")
+    @DisplayName("PATCH /api/banks")
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     inner class PutControllerTest {
         @Test
@@ -131,7 +128,7 @@ internal class BankControllerTest @Autowired constructor(
             val updatedBank = Bank("1101110", 1.2, 4)
 
             // when
-            val performPut = mockMvc.put("/api/banks") {
+            val performPut = mockMvc.patch("/api/banks") {
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(updatedBank)
             }
