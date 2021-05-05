@@ -163,4 +163,20 @@ internal class BankControllerTest @Autowired constructor(
                 .andExpect { status { isNotFound() } }
         }
     }
+
+    @Nested
+    @DisplayName("DELETE /api/banks/{accountNumber}")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class DeleteBankTest {
+        @Test
+        fun `should delete the bank with the given account number`() {
+            // given
+            val accountNumber = "1101110"
+            // when
+            mockMvc.delete("/api/banks/${accountNumber}")
+                // then
+                .andDo { print() }
+                .andExpect { status { isNoContent() } }
+        }
+    }
 }
