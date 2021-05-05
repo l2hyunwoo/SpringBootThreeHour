@@ -13,6 +13,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
+import org.springframework.test.web.servlet.put
 
 // 전체 Application Context를 Initialize할 수 있음
 // 부분적으로 객체를 초기화시키는 등의 전략으로 Spring Boot Test를 해줘야 됨
@@ -102,7 +103,7 @@ internal class BankControllerTest @Autowired constructor(
                     jsonPath("$.transactionFee") { value("0") }
                 }
         }
-        
+
         @Test
         fun `should return BAD REQUEST if bank with given account number already exists`() {
             // given
@@ -115,11 +116,32 @@ internal class BankControllerTest @Autowired constructor(
             }
 
             performPost.andDo { print() }
-                .andExpect {
-                    status { isBadRequest() }
-                }
+                // then
+                .andExpect { status { isBadRequest() } }
+        }
+    }
+
+    @Nested
+    @DisplayName("PUT /api/banks")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class PutControllerTest {
+        @Test
+        fun `should update an existing bank`() {
+            // given
+            val updatedBank = Bank("1101110", 1.2, 4)
+
+            // when
+            val performPut = mockMvc.put("/api/banks") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(updatedBank)
+            }
+
             // then
-            
+            performPut.andDo { print() }
+                .andExpect {
+                    status { isOk() }
+                    
+                }
         }
     }
 }
